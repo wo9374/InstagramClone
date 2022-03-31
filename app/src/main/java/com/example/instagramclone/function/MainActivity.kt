@@ -1,7 +1,8 @@
-package com.example.instagramclone
+package com.example.instagramclone.function
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.instagramclone.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
