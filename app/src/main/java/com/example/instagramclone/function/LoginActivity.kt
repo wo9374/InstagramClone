@@ -8,6 +8,8 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.instagramclone.R
@@ -37,7 +39,13 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var auth : FirebaseAuth
     lateinit var googleSignInClient: GoogleSignInClient
-    lateinit var googleLoginResultLauncher: ActivityResultLauncher<Intent>
+
+    lateinit var getResultLauncher: ActivityResultLauncher<Intent>
+    /*var getResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if (it.resultCode == RESULT_OK){
+            it.data
+        }
+    }*/
 
     lateinit var callbackManager: CallbackManager
     val  GOOGLE_LOGIN_CODE = 9001
@@ -55,7 +63,21 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         callbackManager = CallbackManager.Factory.create()
-        printHashKey()
+        //printHashKey()
+
+        getResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            if (it.resultCode == RESULT_OK){
+                val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                try {
+                    // Google 로그인에 성공했습니다. Firebase 로 인증합니다.
+                    val account = task.getResult(ApiException::class.java)!!
+                    firebaseAuthWithGoogle(account)
+                } catch (e: ApiException) {
+                    // Google 로그인 실패, UI를 적절하게 업데이트
+                    Log.d(LoginActivity::class.java.toString(), e.message.toString())
+                }
+            }
+        }
 
         binding.emailLoginBtn.setOnClickListener {
             signInAndSignUp()
@@ -71,38 +93,22 @@ class LoginActivity : AppCompatActivity() {
 
     fun googleLogin(){
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
+        getResultLauncher.launch(signInIntent)
+        //startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
     }
 
     fun facebookLogin(){
         LoginManager.getInstance()
-            .logInWithReadPermissions(this, listOf("email", "public_profile"))
+            .logInWithReadPermissions(this, callbackManager, listOf("email", "public_profile"))
 
         LoginManager.getInstance()
             .registerCallback(callbackManager, object : FacebookCallback<LoginResult>{
-                override fun onSuccess(result: LoginResult?) {
-                    handleFacebookAccessToken(result?.accessToken) //로그인 성공시 Facebook Data 를 Firebase 로 넘김
+                override fun onSuccess(result: LoginResult) {
+                    handleFacebookAccessToken(result.accessToken) //로그인 성공시 Facebook Data 를 Firebase 로 넘김
                 }
                 override fun onCancel() {}
-                override fun onError(error: FacebookException?) {}
+                override fun onError(error: FacebookException) {}
             })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GOOGLE_LOGIN_CODE) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account)
-            } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.d(LoginActivity::class.java.toString(), e.message.toString())
-            }
-        }
     }
 
     fun handleFacebookAccessToken(token: AccessToken?) {
