@@ -6,9 +6,9 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -31,7 +31,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.util.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -39,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var auth : FirebaseAuth
     lateinit var googleSignInClient: GoogleSignInClient
-
     lateinit var getResultLauncher: ActivityResultLauncher<Intent>
     /*var getResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if (it.resultCode == RESULT_OK){
@@ -48,11 +46,25 @@ class LoginActivity : AppCompatActivity() {
     }*/
 
     lateinit var callbackManager: CallbackManager
-    val  GOOGLE_LOGIN_CODE = 9001
+
+    interface ClickCallBack{
+        fun onClick(view: View)
+    }
+
+    private val clickCallBack = object: ClickCallBack{
+        override fun onClick(view : View){
+            when(view.id){
+                binding.emailLoginBtn.id -> signInAndSignUp()
+                binding.signInFacebook.id -> facebookLogin()
+                binding.signInGoogle.id -> googleLogin()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        binding.clickCallBack = clickCallBack
 
         auth = FirebaseAuth.getInstance()
 
@@ -76,25 +88,16 @@ class LoginActivity : AppCompatActivity() {
                     // Google 로그인 실패, UI를 적절하게 업데이트
                     Log.d(LoginActivity::class.java.toString(), e.message.toString())
                 }
+            }else{
+                Log.e("TAG", "RESULT_FAil 파이어베이스 프로젝트 설정에 SHA 인증서 지문 추가 추천")
             }
-        }
-
-        binding.emailLoginBtn.setOnClickListener {
-            signInAndSignUp()
-        }
-
-        binding.signInFacebook.setOnClickListener {
-            facebookLogin()
-        }
-        binding.signInGoogle.setOnClickListener {
-            googleLogin()
         }
     }
 
     fun googleLogin(){
         val signInIntent = googleSignInClient.signInIntent
         getResultLauncher.launch(signInIntent)
-        //startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE)
+        //startActivityForResult(signInIntent, GOOGLE_LOGIN_CODE) //deprecated
     }
 
     fun facebookLogin(){
@@ -104,14 +107,14 @@ class LoginActivity : AppCompatActivity() {
         LoginManager.getInstance()
             .registerCallback(callbackManager, object : FacebookCallback<LoginResult>{
                 override fun onSuccess(result: LoginResult) {
-                    handleFacebookAccessToken(result.accessToken) //로그인 성공시 Facebook Data 를 Firebase 로 넘김
+                    firebaseAuthWithFacebook(result.accessToken) //로그인 성공시 Facebook Data 를 Firebase 로 넘김
                 }
                 override fun onCancel() {}
                 override fun onError(error: FacebookException) {}
             })
     }
 
-    fun handleFacebookAccessToken(token: AccessToken?) {
+    fun firebaseAuthWithFacebook(token: AccessToken?) {
         // AccessToken 으로 Facebook 인증
         val credential = FacebookAuthProvider.getCredential(token?.token!!)
 

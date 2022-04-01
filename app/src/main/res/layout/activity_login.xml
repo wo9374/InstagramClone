@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="clickCallBack"
+            type="com.example.instagramclone.function.LoginActivity.ClickCallBack" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -58,6 +65,7 @@
                 android:layout_height="40dp"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="35dp"
+                android:onClick="@{clickCallBack::onClick}"
                 android:text="@string/signin_email"
                 app:layout_constraintBottom_toTopOf="@id/sign_in_facebook" />
 
@@ -68,6 +76,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/btn_signin_facebook"
+                android:onClick="@{clickCallBack::onClick}"
                 android:text="@string/signin_facebook"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@id/sign_in_google" />
@@ -79,6 +88,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="35dp"
                 android:background="@drawable/btn_signin_google"
+                android:onClick="@{clickCallBack::onClick}"
                 android:text="@string/signin_google"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent" />
