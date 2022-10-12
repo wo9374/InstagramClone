@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import java.security.MessageDigest
@@ -147,10 +148,11 @@ class LoginActivity : AppCompatActivity() {
             when {
                 it.isSuccessful ->  //Creating a user account
                     moveMainPage(it.result?.user)
-                it.exception?.message.isNullOrEmpty() ->    //Show the error message
-                    Toast.makeText(this, it.exception?.message, Toast.LENGTH_SHORT).show()
-                else -> //Login if you have account
+                it.exception is FirebaseAuthUserCollisionException ->
                     signInEmail()
+                it.exception is Exception -> { //Show the error message
+                    Toast.makeText(this, it.exception?.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
