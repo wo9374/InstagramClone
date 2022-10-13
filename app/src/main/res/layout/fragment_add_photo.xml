@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/add_photo_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/edit_explain"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:hint="@string/hint_image_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/add_photo_img"
+            app:layout_constraintTop_toTopOf="@+id/add_photo_img" />
+
+        <Button
+            android:id="@+id/add_photo_upload_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_image"
+            android:textColor="@color/black"
+            android:theme="@style/ButtonStyle"
+            app:layout_constraintTop_toBottomOf="@+id/edit_explain" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

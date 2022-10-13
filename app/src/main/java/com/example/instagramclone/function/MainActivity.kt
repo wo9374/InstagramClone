@@ -1,7 +1,9 @@
 package com.example.instagramclone.function
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -21,5 +23,7 @@ class MainActivity : AppCompatActivity() {
             binding.bottomNavigation,
             findNavController(R.id.main_content)
         )
+
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
     }
 }

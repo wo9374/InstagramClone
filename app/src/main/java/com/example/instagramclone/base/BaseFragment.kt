@@ -8,13 +8,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 
 abstract class BaseFragment<T : ViewDataBinding>(private val layoutId: Int) : Fragment() {
     private var _binding: T? = null
     val binding:T get() = _binding!!
 
     lateinit var mContext: Context
-    //lateinit var navController: NavController
+    lateinit var navController: NavController
 
     //return layout resource id
     override fun onAttach(context: Context) {
@@ -29,7 +31,7 @@ abstract class BaseFragment<T : ViewDataBinding>(private val layoutId: Int) : Fr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //navController = Navigation.findNavController(binding.root)
+        navController = Navigation.findNavController(binding.root)
     }
 
     override fun onDestroy() {

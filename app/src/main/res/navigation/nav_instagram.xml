@@ -10,11 +10,11 @@
 
     <fragment
         android:id="@+id/action_search"
-        android:name="com.example.instagramclone.function.DetailViewFragment"/>
+        android:name="com.example.instagramclone.function.GridFragment"/>
 
     <fragment
         android:id="@+id/action_add_photo"
-        android:name="com.example.instagramclone.function.GridFragment"/>
+        android:name="com.example.instagramclone.function.AddPhotoFragment"/>
 
     <fragment
         android:id="@+id/action_favorite_alarm"
