@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.example.instagramclone.BuildConfig
 import com.example.instagramclone.R
 import com.example.instagramclone.databinding.ActivityLoginBinding
 import com.facebook.AccessToken
@@ -70,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("856064662288-vehejte6lhc891ok48dmrfpmjh9sb50u.apps.googleusercontent.com")
+            .requestIdToken(BuildConfig.SIGNIN_TOKEN)
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)

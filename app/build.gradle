@@ -4,6 +4,9 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     compileSdk 32
 
@@ -15,6 +18,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "SIGNIN_TOKEN", properties["signin.token"]
     }
 
     buildTypes {
@@ -53,4 +58,8 @@ dependencies {
 
     //Facebook Login
     implementation 'com.facebook.android:facebook-login:12.0.0'
+
+    //navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
 }
