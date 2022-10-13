@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_instagram">
+
+    <fragment
+        android:id="@+id/action_home"
+        android:name="com.example.instagramclone.function.HomeFragment" />
+
+    <fragment
+        android:id="@+id/action_search"
+        android:name="com.example.instagramclone.function.DetailViewFragment"/>
+
+    <fragment
+        android:id="@+id/action_add_photo"
+        android:name="com.example.instagramclone.function.GridFragment"/>
+
+    <fragment
+        android:id="@+id/action_favorite_alarm"
+        android:name="com.example.instagramclone.function.AlarmFragment"/>
+
+    <fragment
+        android:id="@+id/action_account"
+        android:name="com.example.instagramclone.function.UserFragment"/>
+</navigation>
