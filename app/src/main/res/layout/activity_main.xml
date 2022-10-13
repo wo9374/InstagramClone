@@ -33,7 +33,8 @@
             android:layout_height="0dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/nav_division"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_division" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_division"
+            app:navGraph="@navigation/nav_instagram"/>
 
         <View
             android:id="@+id/nav_division"
