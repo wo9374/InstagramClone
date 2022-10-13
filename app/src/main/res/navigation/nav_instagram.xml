@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/action_home"
-        android:name="com.example.instagramclone.function.HomeFragment" />
+        android:name="com.example.instagramclone.function.detail.DetailViewFragment" />
 
     <fragment
         android:id="@+id/action_search"
