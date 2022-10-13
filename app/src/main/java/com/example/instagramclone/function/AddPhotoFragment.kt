@@ -15,6 +15,9 @@ import com.example.instagramclone.R
 import com.example.instagramclone.base.BaseFragment
 import com.example.instagramclone.databinding.FragmentAddPhotoBinding
 import com.example.instagramclone.model.ContentDTO
+import com.example.instagramclone.util.Firebase.auth
+import com.example.instagramclone.util.Firebase.firestore
+import com.example.instagramclone.util.Firebase.storage
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,20 +27,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AddPhotoFragment : BaseFragment<FragmentAddPhotoBinding>(R.layout.fragment_add_photo) {
-    lateinit var storage : FirebaseStorage
+
     lateinit var photoUri : Uri
-    lateinit var auth: FirebaseAuth
-    lateinit var firestore: FirebaseFirestore
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //권한 존재시 Album Pick On
         if (checkPermission()){
-            storage = FirebaseStorage.getInstance()
-            auth = FirebaseAuth.getInstance()
-            firestore = FirebaseFirestore.getInstance()
-
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
 

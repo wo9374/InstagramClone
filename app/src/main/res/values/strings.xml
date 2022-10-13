@@ -59,4 +59,6 @@
     <!-- etc -->
     <item name="visible" type="id" />
     <item name="masked" type="id" />
+
+    <string name="like_count">Like %1s</string>
 </resources>

@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.instagramclone.BuildConfig
 import com.example.instagramclone.R
 import com.example.instagramclone.databinding.ActivityLoginBinding
+import com.example.instagramclone.util.Firebase.auth
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -38,7 +39,6 @@ import java.security.NoSuchAlgorithmException
 class LoginActivity : AppCompatActivity() {
     lateinit var binding : ActivityLoginBinding
 
-    lateinit var auth : FirebaseAuth
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var getResultLauncher: ActivityResultLauncher<Intent>
     /*var getResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
@@ -67,8 +67,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.clickCallBack = clickCallBack
-
-        auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(BuildConfig.SIGNIN_TOKEN)
