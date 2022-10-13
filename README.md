@@ -1,7 +1,6 @@
 # InstagramClone
  
-기본 Layout - Constraint 변경
-
+ConstraintLayout 사용
 Databinding 사용
 
 LoginActivity
