@@ -3,6 +3,7 @@ package com.example.instagramclone.model
 data class ContentDTO(
     var explain : String = "",
     var imageUrl : String = "",
+    val contentUid: String = "",
     var uid : String = "",
     var userId: String = "",
     var timeStamp: Long = 0,

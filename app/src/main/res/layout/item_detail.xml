@@ -51,7 +51,7 @@
                 binding:glide="@{item.imageUrl}" />
 
             <ImageView
-                android:id="@+id/favorite"
+                android:id="@+id/like_img"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="8dp"
@@ -68,16 +68,16 @@
                 android:layout_height="35dp"
                 android:layout_marginStart="8dp"
                 android:src="@drawable/ic_chat_black"
-                app:layout_constraintStart_toEndOf="@id/favorite"
-                app:layout_constraintTop_toTopOf="@+id/favorite" />
+                app:layout_constraintStart_toEndOf="@id/like_img"
+                app:layout_constraintTop_toTopOf="@+id/like_img" />
 
             <TextView
                 android:id="@+id/favorite_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{@string/like_count(item.likeCount)}"
-                app:layout_constraintStart_toStartOf="@+id/favorite"
-                app:layout_constraintTop_toBottomOf="@+id/favorite"
+                app:layout_constraintStart_toStartOf="@+id/like_img"
+                app:layout_constraintTop_toBottomOf="@+id/like_img"
                 tools:text="like 0" />
 
             <TextView

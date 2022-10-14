@@ -18,20 +18,37 @@ import com.example.instagramclone.util.Firebase.auth
 
 class DetailViewRecyclerAdapter : ListAdapter<ContentDTO, DetailViewHolder>(DetailDiffUtil()){
 
+    lateinit var listener : OnFavoriteClickListener
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val detailItemBinding = ItemDetailBinding.inflate( LayoutInflater.from(parent.context), parent,false)
-        return DetailViewHolder(detailItemBinding)
+        return DetailViewHolder(detailItemBinding, listener)
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         // currentList: 해당 Adapter 에 "submitList()"를 통해 삽입한 아이템 리스트
         holder.bind(currentList[position])
     }
+
+    interface OnFavoriteClickListener {
+        fun onFavoriteClick(v: View, position: Int)
+    }
+
+    fun setOnFavoriteClick(listener: OnFavoriteClickListener){
+        this.listener = listener
+    }
 }
 
-class DetailViewHolder(val binding: ItemDetailBinding): RecyclerView.ViewHolder(binding.root){
+class DetailViewHolder(val binding: ItemDetailBinding, private val listener: DetailViewRecyclerAdapter.OnFavoriteClickListener): RecyclerView.ViewHolder(binding.root){
     fun bind(item: ContentDTO){
-        binding.item = item
+        val pos = adapterPosition
+        if (pos != RecyclerView.NO_POSITION){
+            binding.likeImg.setOnClickListener {
+                listener.onFavoriteClick(binding.root, pos)
+            }
+
+            binding.item = item
+        }
     }
 }
 

@@ -24,6 +24,12 @@ class DetailViewFragment : BaseFragment<FragmentDetailViewBinding>(R.layout.frag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        detailAdapter.setOnFavoriteClick(object : DetailViewRecyclerAdapter.OnFavoriteClickListener{
+            override fun onFavoriteClick(v: View, position: Int) {
+                viewModel.onLikeClicked(position)
+            }
+        })
+
         binding.detailRecycler.apply {
             adapter = detailAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
