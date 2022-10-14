@@ -6,8 +6,8 @@ data class ContentDTO(
     var uid : String = "",
     var userId: String = "",
     var timeStamp: Long = 0,
-    var favoriteCount: Int = 0,
-    var favorites : MutableMap<String, Boolean> = mutableMapOf()
+    var likeCount: Int = 0,
+    var likedUsers : MutableMap<String, Boolean> = mutableMapOf()
 ){
     data class Comment(
         var uid: String = "",
