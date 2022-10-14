@@ -6,7 +6,12 @@
 
     <fragment
         android:id="@+id/action_home"
-        android:name="com.example.instagramclone.function.detail.DetailViewFragment" />
+        android:name="com.example.instagramclone.function.detail.DetailViewFragment">
+
+        <action
+            android:id="@+id/action_detailFragment_to_profileFragment"
+            app:destination="@id/profileViewFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/action_search"
@@ -23,4 +28,17 @@
     <fragment
         android:id="@+id/action_account"
         android:name="com.example.instagramclone.function.account.AccountFragment"/>
+
+    <fragment
+        android:id="@+id/profileViewFragment"
+        android:name="com.example.instagramclone.function.ProfileFragment">
+        <argument
+            android:name="uid"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="userId"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
 </navigation>

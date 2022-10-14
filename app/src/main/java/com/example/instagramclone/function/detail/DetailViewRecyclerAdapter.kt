@@ -18,7 +18,7 @@ import com.example.instagramclone.util.Firebase.auth
 
 class DetailViewRecyclerAdapter : ListAdapter<ContentDTO, DetailViewHolder>(DetailDiffUtil()){
 
-    lateinit var listener : OnFavoriteClickListener
+    lateinit var listener : OnDetailClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val detailItemBinding = ItemDetailBinding.inflate( LayoutInflater.from(parent.context), parent,false)
@@ -30,21 +30,26 @@ class DetailViewRecyclerAdapter : ListAdapter<ContentDTO, DetailViewHolder>(Deta
         holder.bind(currentList[position])
     }
 
-    interface OnFavoriteClickListener {
-        fun onFavoriteClick(v: View, position: Int)
+    interface OnDetailClickListener {
+        fun onLikeClick(v: View, position: Int)
+        fun onProfileClick(v: View, item: ContentDTO,position: Int)
     }
 
-    fun setOnFavoriteClick(listener: OnFavoriteClickListener){
+    fun setOnDetailClick(listener: OnDetailClickListener){
         this.listener = listener
     }
 }
 
-class DetailViewHolder(val binding: ItemDetailBinding, private val listener: DetailViewRecyclerAdapter.OnFavoriteClickListener): RecyclerView.ViewHolder(binding.root){
+class DetailViewHolder(val binding: ItemDetailBinding, private val listener: DetailViewRecyclerAdapter.OnDetailClickListener): RecyclerView.ViewHolder(binding.root){
     fun bind(item: ContentDTO){
         val pos = adapterPosition
         if (pos != RecyclerView.NO_POSITION){
             binding.likeImg.setOnClickListener {
-                listener.onFavoriteClick(binding.root, pos)
+                listener.onLikeClick(binding.root, pos)
+            }
+
+            binding.profileImg.setOnClickListener {
+                listener.onProfileClick(binding.root, item ,pos)
             }
 
             binding.item = item
