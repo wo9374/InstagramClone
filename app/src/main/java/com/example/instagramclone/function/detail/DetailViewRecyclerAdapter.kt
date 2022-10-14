@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -14,44 +16,35 @@ import com.example.instagramclone.model.ContentDTO
 import com.example.instagramclone.util.Firebase.auth
 
 
-class DetailViewRecyclerAdapter(private val dataList:ArrayList<ContentDTO>) : RecyclerView.Adapter<DetailViewHolder>(){
-
-    lateinit var listener : OnFavoriteClickListener
+class DetailViewRecyclerAdapter : ListAdapter<ContentDTO, DetailViewHolder>(DetailDiffUtil()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         val detailItemBinding = ItemDetailBinding.inflate( LayoutInflater.from(parent.context), parent,false)
-        return DetailViewHolder(detailItemBinding, listener)
+        return DetailViewHolder(detailItemBinding)
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        holder.bind(dataList[position])
-    }
-
-    override fun getItemCount(): Int {
-        return dataList.size
-    }
-
-
-    interface OnFavoriteClickListener {
-        fun onFavoriteClick(v: View, data: ContentDTO, position: Int)
-    }
-
-    fun setOnFavoriteClick(listener: OnFavoriteClickListener){
-        this.listener = listener
+        // currentList: 해당 Adapter 에 "submitList()"를 통해 삽입한 아이템 리스트
+        holder.bind(currentList[position])
     }
 }
 
-class DetailViewHolder(val binding: ItemDetailBinding, val listener: DetailViewRecyclerAdapter.OnFavoriteClickListener): RecyclerView.ViewHolder(binding.root){
+class DetailViewHolder(val binding: ItemDetailBinding): RecyclerView.ViewHolder(binding.root){
     fun bind(item: ContentDTO){
-        val position = adapterPosition
-        if (position != RecyclerView.NO_POSITION){
-            binding.favorite.setOnClickListener {
-                listener.onFavoriteClick(binding.root, item, position)
-            }
-            binding.item = item
-        }
+        binding.item = item
     }
 }
+
+class DetailDiffUtil : DiffUtil.ItemCallback<ContentDTO>() {
+    override fun areItemsTheSame(oldItem: ContentDTO, newItem: ContentDTO): Boolean {
+        return (oldItem.uid == newItem.uid) and (oldItem.timeStamp == newItem.timeStamp)
+    }
+
+    override fun areContentsTheSame(oldItem: ContentDTO, newItem: ContentDTO): Boolean {
+        return (oldItem.likeCount == newItem.likeCount) or (oldItem.likedUsers == newItem.likedUsers)
+    }
+}
+
 
 @BindingAdapter("binding:glide")
 fun bindGlide(view: ImageView, imgUrl: String?){
@@ -68,7 +61,7 @@ fun bindGlide(view: ImageView, imgUrl: String?){
 
 @BindingAdapter("binding:heart_click")
 fun bindHeartClick(view: ImageView, item: ContentDTO){
-    if (item.favorites.containsKey(auth.currentUser?.uid)){
+    if (item.likedUsers.containsKey(auth.currentUser?.uid)){
         view.setImageResource(R.drawable.ic_favorite)
     } else {
         view.setImageResource(R.drawable.ic_favorite_border)
