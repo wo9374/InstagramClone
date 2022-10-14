@@ -22,5 +22,5 @@
 
     <fragment
         android:id="@+id/action_account"
-        android:name="com.example.instagramclone.function.UserFragment"/>
+        android:name="com.example.instagramclone.function.account.AccountFragment"/>
 </navigation>
