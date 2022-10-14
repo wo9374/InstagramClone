@@ -11,7 +11,7 @@
             android:id="@+id/profile_img"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_account"
+            android:layout_margin="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,7 +72,7 @@
             android:gravity="center"
             android:text="@string/count_0"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintBottom_toTopOf="@+id/btn_logout"
             app:layout_constraintEnd_toEndOf="@id/post_txt_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@id/post_txt_2"
@@ -90,10 +90,12 @@
             app:layout_constraintTop_toBottomOf="@id/post_txt_3" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_logout"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:text="@string/follow"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/signout"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/profile_img"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,6 +105,7 @@
             android:id="@+id/account_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
