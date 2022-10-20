@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.instagramclone.model.ContentDTO
+import com.example.instagramclone.model.FollowDTO
 import com.example.instagramclone.util.Firebase
 import com.example.instagramclone.util.PathString
 import com.google.firebase.firestore.ktx.snapshots
@@ -28,6 +29,14 @@ class AccountViewModel(private val uid: String?) : ViewModel(){
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = ""
         )
+
+    val followData = Firebase.firestore
+        .collection(PathString.users)
+        .document(uid ?: "")
+        .snapshots()
+        .mapLatest { value ->
+            value.toObject(FollowDTO::class.java) ?: throw IllegalArgumentException("null returned")
+        }
 
     val postList = Firebase.firestore
         .collection(PathString.images)
@@ -58,6 +67,44 @@ class AccountViewModel(private val uid: String?) : ViewModel(){
                 }
         }
     } }
+
+    /**
+     * 팔로우/언팔로우 요청 처리
+     */
+    fun requestFollow(followDto: FollowDTO) = kotlin.runCatching {
+        val tsDocMyFollowing = Firebase.firestore.collection("users").document(Firebase.auth.currentUser?.uid!!)
+        Firebase.firestore.runTransaction {
+            val myFollow = it.get(tsDocMyFollowing).toObject(FollowDTO::class.java) ?: FollowDTO()
+            if (myFollow.followings.containsKey(uid!!)) {
+                it.set(
+                    tsDocMyFollowing,
+                    myFollow.copy(followingCount = myFollow.followingCount - 1).apply { followings.remove(uid!!) }
+                )
+            } else {
+                it.set(
+                    tsDocMyFollowing,
+                    myFollow.copy(followingCount = myFollow.followingCount + 1).apply { followings[uid!!] = true }
+                )
+            }
+        }
+
+        val tsDocOthersFollower = Firebase.firestore.collection("users").document(uid!!)
+        Firebase.firestore.runTransaction {
+            if (followDto.followers.containsKey(Firebase.auth.currentUser?.uid)) {
+                it.set(
+                    tsDocOthersFollower,
+                    followDto.copy(followerCount = followDto.followerCount - 1).apply { followers.remove(Firebase.auth.currentUser?.uid) }
+                )
+            } else {
+                it.set(
+                    tsDocOthersFollower,
+                    followDto.copy(followerCount = followDto.followerCount + 1).apply { followers[Firebase.auth.currentUser?.uid!!] = true }
+                )
+
+                //registerFollowAlarm()
+            }
+        }
+    }
 }
 
 class AccountViewModelFactory(private val uid: String?) : ViewModelProvider.NewInstanceFactory() {

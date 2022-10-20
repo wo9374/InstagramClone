@@ -42,7 +42,7 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
             binding.apply {
                 followingCount.text = newValue.followingCount.toString()
                 followerCount.text = newValue.followerCount.toString()
-                if (newValue.followers.contains(Firebase.auth.currentUser?.uid)) {
+                if (newValue.followers.contains(auth.currentUser?.uid)) {
                     btnLogout.setText(R.string.follow_cancel)
                 } else {
                     btnLogout.setText(R.string.follow)
@@ -51,22 +51,18 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         }
     }
 
-    private val albumLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // 사진을 선택했을 때
-            LoadingDialog.show(requireContext())
-            viewModel.uploadProfileImage(result.data?.data) {
-                LoadingDialog.dismiss()
-            }
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.GONE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (requireActivity() as MainActivity).supportActionBar?.subtitle = userId
+
+        setupProfileButton()
 
         lifecycleScope.launch {
             viewModel.profileImageUrl
@@ -82,6 +78,15 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         }
 
         lifecycleScope.launch {
+            viewModel.followData
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .distinctUntilChanged()
+                .collectLatest {
+                    followDto = it
+                }
+        }
+
+        lifecycleScope.launch {
             viewModel.postList
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .distinctUntilChanged()
@@ -91,14 +96,23 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
                 }
         }
 
-        binding.profileImg.setOnClickListener {
-            val imagePickerIntent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
-            albumLauncher.launch(imagePickerIntent)
-        }
-
         binding.accountRecycler.apply {
             adapter = listAdapter
             layoutManager = GridLayoutManager(requireContext(), 3)
         }
+    }
+
+
+    private fun setupProfileButton() = uid?.also {
+        binding.btnLogout.apply {
+            setText(R.string.follow)
+            setOnClickListener { viewModel.requestFollow(followDto) }
+            isEnabled = it != auth.currentUser?.uid
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.VISIBLE
     }
 }

@@ -41,11 +41,6 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var googleSignInClient: GoogleSignInClient
     lateinit var getResultLauncher: ActivityResultLauncher<Intent>
-    /*var getResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if (it.resultCode == RESULT_OK){
-            it.data
-        }
-    }*/
 
     lateinit var callbackManager: CallbackManager
 

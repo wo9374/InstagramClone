@@ -56,6 +56,16 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         }
 
         lifecycleScope.launch {
+            viewModel.followData
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .distinctUntilChanged()
+                .collectLatest {
+                    binding.followerCount.text = it.followerCount.toString()
+                    binding.followingCount.text = it.followingCount.toString()
+                }
+        }
+
+        lifecycleScope.launch {
             viewModel.postList
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .distinctUntilChanged()

@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instagramclone.R
 import com.example.instagramclone.base.BaseFragment
 import com.example.instagramclone.databinding.FragmentDetailViewBinding
+import com.example.instagramclone.function.MainActivity
 import com.example.instagramclone.model.ContentDTO
+import com.example.instagramclone.util.Firebase
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -33,8 +35,12 @@ class DetailViewFragment : BaseFragment<FragmentDetailViewBinding>(R.layout.frag
 
             override fun onProfileClick(v: View, item: ContentDTO, position: Int) {
                 if (!(item.uid.isBlank() || item.userId.isBlank())) {
-                    val action = DetailViewFragmentDirections.actionDetailFragmentToProfileFragment(item.uid, item.userId)
-                    findNavController().navigate(action)
+                    if (item.uid != Firebase.auth.currentUser?.uid){ //포스팅의 프로필이 현재 로그인한 프로필과 다를때 (다른 사용자일때) 프로필뷰 이동
+                        val action = DetailViewFragmentDirections.actionDetailFragmentToProfileFragment(item.uid, item.userId)
+                        navController.navigate(action)
+                    } else {
+                        navController.navigate(R.id.action_account)
+                    }
                 }
             }
         })
