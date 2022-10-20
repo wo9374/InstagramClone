@@ -14,6 +14,8 @@ import com.example.instagramclone.R
 import com.example.instagramclone.databinding.ItemDetailBinding
 import com.example.instagramclone.model.ContentDTO
 import com.example.instagramclone.util.Firebase.auth
+import com.example.instagramclone.util.Firebase.firestore
+import com.example.instagramclone.util.PathString
 
 
 class DetailViewRecyclerAdapter : ListAdapter<ContentDTO, DetailViewHolder>(DetailDiffUtil()){
@@ -79,6 +81,22 @@ fun bindGlide(view: ImageView, imgUrl: String?){
             .into(view)
     else
         view.setImageResource(R.drawable.ic_launcher_background)
+}
+
+@BindingAdapter("binding:bind_profile")
+fun bindProfile(view: ImageView, uid: String?){
+    firestore.collection(PathString.profileImages)
+        .document(uid ?: "")
+        .get()
+        .addOnCompleteListener { task ->
+            val url = task.result.data?.get("image")
+
+            Glide.with(view)
+                .load(url)
+                .circleCrop()
+                .error(R.drawable.ic_account)
+                .into(view)
+        }
 }
 
 @BindingAdapter("binding:heart_click")
