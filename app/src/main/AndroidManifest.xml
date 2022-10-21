@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".function.CommentActivity"
+            android:name=".function.comment.CommentActivity"
             android:exported="false"/>
 
         <activity

@@ -1,4 +1,4 @@
-package com.example.instagramclone.function
+package com.example.instagramclone.function.comment
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instagramclone.R
 import com.example.instagramclone.databinding.ActivityCommentBinding
 import com.example.instagramclone.model.ContentDTO
-import com.example.instagramclone.util.Firebase
 import com.example.instagramclone.util.Firebase.auth
 import com.example.instagramclone.util.Firebase.firestore
 

@@ -1,4 +1,4 @@
-package com.example.instagramclone.function
+package com.example.instagramclone.function.comment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,7 +11,9 @@ import com.example.instagramclone.databinding.ItemCommentBinding
 import com.example.instagramclone.model.ContentDTO
 import com.example.instagramclone.util.Firebase
 
-class CommentListAdapter : ListAdapter<ContentDTO.Comment, CommentListAdapter.CommentViewHolder>(CommentDiffUtil()) {
+class CommentListAdapter : ListAdapter<ContentDTO.Comment, CommentListAdapter.CommentViewHolder>(
+    CommentDiffUtil()
+) {
 
     inner class CommentViewHolder(private val binding: ItemCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
