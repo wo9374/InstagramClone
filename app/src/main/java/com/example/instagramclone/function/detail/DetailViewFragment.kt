@@ -1,5 +1,6 @@
 package com.example.instagramclone.function.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instagramclone.R
 import com.example.instagramclone.base.BaseFragment
 import com.example.instagramclone.databinding.FragmentDetailViewBinding
+import com.example.instagramclone.function.CommentActivity
 import com.example.instagramclone.function.MainActivity
 import com.example.instagramclone.model.ContentDTO
 import com.example.instagramclone.util.Firebase
@@ -33,7 +35,7 @@ class DetailViewFragment : BaseFragment<FragmentDetailViewBinding>(R.layout.frag
                 viewModel.onLikeClicked(position)
             }
 
-            override fun onProfileClick(v: View, item: ContentDTO, position: Int) {
+            override fun onProfileClick(v: View, item: ContentDTO) {
                 if (!(item.uid.isBlank() || item.userId.isBlank())) {
                     if (item.uid != Firebase.auth.currentUser?.uid){ //포스팅의 프로필이 현재 로그인한 프로필과 다를때 (다른 사용자일때) 프로필뷰 이동
                         val action = DetailViewFragmentDirections.actionDetailFragmentToProfileFragment(item.uid, item.userId)
@@ -42,6 +44,12 @@ class DetailViewFragment : BaseFragment<FragmentDetailViewBinding>(R.layout.frag
                         navController.navigate(R.id.action_account)
                     }
                 }
+            }
+
+            override fun onCommentClick(v: View, item: ContentDTO) {
+                val intent = Intent(v.context, CommentActivity::class.java)
+                intent.putExtra("contentUid", item.contentUid)
+                startActivity(intent)
             }
         })
 

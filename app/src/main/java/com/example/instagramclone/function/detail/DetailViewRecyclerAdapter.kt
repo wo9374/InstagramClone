@@ -34,7 +34,8 @@ class DetailViewRecyclerAdapter : ListAdapter<ContentDTO, DetailViewHolder>(Deta
 
     interface OnDetailClickListener {
         fun onLikeClick(v: View, position: Int)
-        fun onProfileClick(v: View, item: ContentDTO,position: Int)
+        fun onProfileClick(v: View, item: ContentDTO)
+        fun onCommentClick(v: View, item: ContentDTO)
     }
 
     fun setOnDetailClick(listener: OnDetailClickListener){
@@ -51,7 +52,11 @@ class DetailViewHolder(val binding: ItemDetailBinding, private val listener: Det
             }
 
             binding.profileImg.setOnClickListener {
-                listener.onProfileClick(binding.root, item ,pos)
+                listener.onProfileClick(binding.root, item)
+            }
+
+            binding.detailChat.setOnClickListener {
+                listener.onCommentClick(binding.root, item)
             }
 
             binding.item = item
