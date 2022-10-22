@@ -30,7 +30,9 @@ class DetailViewFragment : BaseFragment<FragmentDetailViewBinding>(R.layout.frag
 
         detailAdapter.setOnDetailClick(object : DetailViewRecyclerAdapter.OnDetailClickListener{
             override fun onLikeClick(v: View, position: Int) {
+                v.isSelected = !v.isSelected
                 viewModel.onLikeClicked(position)
+                if (v.isSelected) viewModel.registerLikeAlarm(position)
             }
 
             override fun onProfileClick(v: View, item: ContentDTO) {
