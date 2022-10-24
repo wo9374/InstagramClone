@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instagramclone.R
 import com.example.instagramclone.databinding.ActivityCommentBinding
@@ -18,7 +19,9 @@ import com.example.instagramclone.util.Firebase.firestore
 class CommentActivity : AppCompatActivity() {
     lateinit var binding : ActivityCommentBinding
 
-    lateinit var contentUid : String
+    private val args: CommentActivityArgs by navArgs()
+    private val contentUid: String by lazy { args.contentUid }
+    private val destinationUid: String by lazy { args.destinationUid }
 
     private val listAdapter = CommentListAdapter()
 
@@ -27,13 +30,12 @@ class CommentActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_comment)
 
-        contentUid = intent.getStringExtra("contentUid") ?: ""
-
         binding.apply {
             sendBtn.setOnClickListener {
-                sendComment( commentEditTxt.text.toString() )
+                val text = commentEditTxt.text.toString()
+                sendComment(text)
                 commentEditTxt.text.clear()
-                
+                registerCommentAlarm(destinationUid, text)
             }
 
             commentRecycler.adapter = listAdapter

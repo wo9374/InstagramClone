@@ -46,9 +46,8 @@ class DetailViewFragment : BaseFragment<FragmentDetailViewBinding>(R.layout.frag
             }
 
             override fun onCommentClick(v: View, item: ContentDTO) {
-                val intent = Intent(v.context, CommentActivity::class.java)
-                intent.putExtra("contentUid", item.contentUid)
-                startActivity(intent)
+                val action = DetailViewFragmentDirections.actionDetailFragmentToCommentActivity(item.contentUid, item.userId)
+                navController.navigate(action)
             }
         })
 

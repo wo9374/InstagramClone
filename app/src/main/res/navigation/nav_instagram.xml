@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_instagram"
     app:startDestination="@id/action_home">
 
@@ -11,6 +12,9 @@
         <action
             android:id="@+id/action_detailFragment_to_profileFragment"
             app:destination="@id/profileViewFragment"/>
+        <action
+            android:id="@+id/action_detailFragment_to_commentActivity"
+            app:destination="@id/commentActivity" />
     </fragment>
 
     <fragment
@@ -41,4 +45,20 @@
             app:argType="string"
             android:defaultValue=""/>
     </fragment>
+
+    <activity
+        android:id="@+id/commentActivity"
+        android:name="com.example.instagramclone.function.comment.CommentActivity"
+        tools:layout="@layout/activity_comment">
+
+        <argument
+            android:name="contentUid"
+            app:argType="string"
+            android:defaultValue=""/>
+
+        <argument
+            android:name="destinationUid"
+            app:argType="string"
+            android:defaultValue=""/>
+    </activity>
 </navigation>

@@ -4,16 +4,21 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.instagramclone.model.ALARM_FOLLOW
+import com.example.instagramclone.model.AlarmDTO
 import com.example.instagramclone.model.ContentDTO
 import com.example.instagramclone.model.FollowDTO
+import com.example.instagramclone.util.FcmPush
 import com.example.instagramclone.util.Firebase
 import com.example.instagramclone.util.PathString
+import com.example.instagramclone.util.SystemString
 import com.google.firebase.firestore.ktx.snapshots
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
+import java.lang.String.format
 
 class AccountViewModel(private val uid: String?) : ViewModel(){
     val profileImageUrl = Firebase.firestore
@@ -101,9 +106,28 @@ class AccountViewModel(private val uid: String?) : ViewModel(){
                     followDto.copy(followerCount = followDto.followerCount + 1).apply { followers[Firebase.auth.currentUser?.uid!!] = true }
                 )
 
-                //registerFollowAlarm()
+                registerFollowAlarm()
             }
         }
+    }
+
+    // 팔로우 시 상대방에게 푸시알람 전송
+    private fun registerFollowAlarm() = uid?.let {
+        val alarmDto = AlarmDTO(
+            destinationUid = it,
+            userId = Firebase.auth.currentUser?.email ?: "",
+            uid = Firebase.auth.currentUser?.uid ?: "",
+            kind = ALARM_FOLLOW,
+            timeStamp = System.currentTimeMillis()
+        )
+
+        Firebase.firestore
+            .collection("alarms")
+            .document()
+            .set(alarmDto)
+
+        /*val msg = format(SystemString.ALARM_FOLLOW, Firebase.auth.currentUser?.uid)
+        FcmPush.sendMessage(it, "Instagram-clone", msg)*/
     }
 }
 
