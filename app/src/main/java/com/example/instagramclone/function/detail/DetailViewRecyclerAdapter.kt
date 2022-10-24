@@ -106,9 +106,5 @@ fun bindProfile(view: ImageView, uid: String?){
 
 @BindingAdapter("binding:heart_click")
 fun bindHeartClick(view: ImageView, item: ContentDTO){
-    if (item.likedUsers.containsKey(auth.currentUser?.uid)){
-        view.setImageResource(R.drawable.ic_favorite)
-    } else {
-        view.setImageResource(R.drawable.ic_favorite_border)
-    }
+    view.isSelected = item.likedUsers.containsKey(auth.currentUser?.uid)
 }

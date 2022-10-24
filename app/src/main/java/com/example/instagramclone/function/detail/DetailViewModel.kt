@@ -52,6 +52,8 @@ class DetailViewModel : ViewModel() {
             }else{
                 item.likeCount = item.likeCount + 1
                 item.likedUsers[auth.uid!!] = true
+
+                registerLikeAlarm(clickPosition)
             }
 
             transaction.set(tsDoc, item)
@@ -61,7 +63,7 @@ class DetailViewModel : ViewModel() {
     //좋아요 버튼 눌렸을 때 상대방에게 알람이 가도록 처리
     fun registerLikeAlarm(clickPosition: Int) {
 
-        val destinationUid = itemsFlow.value[clickPosition].userId
+        val destinationUid = itemsFlow.value[clickPosition].uid
 
         if (destinationUid.isBlank()) return
 

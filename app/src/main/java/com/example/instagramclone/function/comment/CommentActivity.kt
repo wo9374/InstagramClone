@@ -7,7 +7,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instagramclone.R
 import com.example.instagramclone.databinding.ActivityCommentBinding
+import com.example.instagramclone.model.ALARM_COMMENT
+import com.example.instagramclone.model.AlarmDTO
 import com.example.instagramclone.model.ContentDTO
+import com.example.instagramclone.util.FcmPush
+import com.example.instagramclone.util.Firebase
 import com.example.instagramclone.util.Firebase.auth
 import com.example.instagramclone.util.Firebase.firestore
 
@@ -29,6 +33,7 @@ class CommentActivity : AppCompatActivity() {
             sendBtn.setOnClickListener {
                 sendComment( commentEditTxt.text.toString() )
                 commentEditTxt.text.clear()
+                
             }
 
             commentRecycler.adapter = listAdapter
@@ -52,6 +57,27 @@ class CommentActivity : AppCompatActivity() {
             .collection("comments")
             .document()
             .set(comment)
+    }
+
+    private fun registerCommentAlarm(destinationUid: String?, message: String) {
+        if (!destinationUid.isNullOrBlank()) {
+            val alarmDto = AlarmDTO(
+                destinationUid = destinationUid,
+                userId = auth.currentUser?.email ?: "",
+                uid = auth.currentUser?.uid ?: "",
+                message = message,
+                kind = ALARM_COMMENT,
+                timeStamp = System.currentTimeMillis()
+            )
+
+            firestore
+                .collection("alarms")
+                .document()
+                .set(alarmDto)
+
+            val msg = "${auth.currentUser?.email} ${getString(R.string.alarm_comment)} of $message"
+            FcmPush.sendMessage(destinationUid, "Instagram-clone", msg)
+        }
     }
 
     private fun getCommentsFromFirestore() {
