@@ -36,6 +36,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
+        freeCompilerArgs = ['-Xjvm-default=enable']
+        // @JvmDefault 해당 어노테이션이 Deprecated 되면서 kotlin의 interface 의 defalut method가 생성되지 않아서 컴파일시 문제가 발생하는 현상 해결.
+
         jvmTarget = '1.8'
     }
 
@@ -73,4 +76,10 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.14.2'
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.9.1'
+
+    //OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
 }
