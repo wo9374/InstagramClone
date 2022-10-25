@@ -22,7 +22,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "SIGNIN_TOKEN", properties["signin.token"]
+        buildConfigField "String", "SIGNIN_TOKEN", properties["signin_token"]
+        buildConfigField "String", "SERVER_KEY", properties['server_key']
+
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -64,7 +67,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.3.1'
+
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.8'
+    implementation 'com.google.firebase:firebase-analytics'
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1'
 
     //Facebook Login
@@ -82,4 +88,7 @@ dependencies {
 
     //OkHttp
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
+
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

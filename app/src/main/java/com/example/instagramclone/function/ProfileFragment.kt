@@ -54,7 +54,15 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.GONE
+        (requireActivity() as MainActivity).binding.apply {
+            bottomNavigation.visibility = View.GONE
+            mainLogo.visibility = View.GONE
+            toolbarBack.visibility = View.VISIBLE
+            profileUserTxt.apply {
+                visibility = View.VISIBLE
+                text = userId
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,9 +90,7 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .distinctUntilChanged()
                 .collectLatest {
-                    it.let {
-                        followDto = it
-                    }
+                    followDto = it
                 }
         }
 
@@ -115,6 +121,11 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
 
     override fun onDestroy() {
         super.onDestroy()
-        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.VISIBLE
+        (requireActivity() as MainActivity).binding.apply {
+            bottomNavigation.visibility = View.VISIBLE
+            mainLogo.visibility = View.VISIBLE
+            toolbarBack.visibility = View.GONE
+            profileUserTxt.visibility = View.GONE
+        }
     }
 }

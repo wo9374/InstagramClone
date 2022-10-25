@@ -128,8 +128,8 @@ class AccountViewModel(private val uid: String?) : ViewModel(){
             .document()
             .set(alarmDto)
 
-        /*val msg = format(SystemString.ALARM_FOLLOW, Firebase.auth.currentUser?.uid)
-        FcmPush.sendMessage(it, "Instagram-clone", msg)*/
+        val msg = format(SystemString.ALARM_FOLLOW, Firebase.auth.currentUser?.email ?: "")
+        FcmPush.sendMessage(it, "Instagram-clone", msg)
     }
 }
 
