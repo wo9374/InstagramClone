@@ -82,7 +82,9 @@ class ProfileFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
                 .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
                 .distinctUntilChanged()
                 .collectLatest {
-                    followDto = it
+                    it.let {
+                        followDto = it
+                    }
                 }
         }
 
