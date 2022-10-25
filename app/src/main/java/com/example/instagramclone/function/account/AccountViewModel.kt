@@ -37,10 +37,12 @@ class AccountViewModel(private val uid: String?) : ViewModel(){
 
     val followData = Firebase.firestore
         .collection(PathString.users)
-        .document(uid ?: "")
+        .document(uid ?: requireNotNull(uid))
         .snapshots()
         .mapLatest { value ->
             value.toObject(FollowDTO::class.java) ?: throw IllegalArgumentException("null returned")
+        }.catch {
+            it.printStackTrace()
         }
 
     val postList = Firebase.firestore
