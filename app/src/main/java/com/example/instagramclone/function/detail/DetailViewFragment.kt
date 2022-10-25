@@ -36,12 +36,12 @@ class DetailViewFragment : BaseFragment<FragmentDetailViewBinding>(R.layout.frag
 
             override fun onProfileClick(v: View, item: ContentDTO) {
                 if (!(item.uid.isBlank() || item.userId.isBlank())) {
-                    if (item.uid != Firebase.auth.currentUser?.uid){ //포스팅의 프로필이 현재 로그인한 프로필과 다를때 (다른 사용자일때) 프로필뷰 이동
-                        val action = DetailViewFragmentDirections.actionDetailFragmentToProfileFragment(item.uid, item.userId)
-                        navController.navigate(action)
+                    val action = if (item.uid != Firebase.auth.currentUser?.uid){ //포스팅의 프로필이 현재 로그인한 프로필과 다를때 (다른 사용자일때) 프로필뷰 이동
+                        DetailViewFragmentDirections.actionDetailFragmentToProfileFragment(item.uid, item.userId)
                     } else {
-                        navController.navigate(R.id.action_account)
+                        DetailViewFragmentDirections.actionDetailFragmentToActionAccount()
                     }
+                    navController.navigate(action)
                 }
             }
 
